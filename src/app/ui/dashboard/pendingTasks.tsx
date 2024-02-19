@@ -7,7 +7,7 @@ export default async function PendingTasks() {
     const allTasks = await fetchTasks();
 
     return (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4">
             {allTasks.filter(task => !task.status).map((tasks) => {               
                 return (
                     <div 
