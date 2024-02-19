@@ -1,54 +1,84 @@
-import { lusitana } from "../fonts";
 import clsx from "clsx";
 import { fetchTasks } from "@/app/lib/data";
-import { Tasks } from "@/app/lib/definitions";
+import { formatDateToLocal } from "@/app/lib/utils";
+import { ClockIcon, CheckCircleIcon, UserCircleIcon, UserGroupIcon, UserIcon } from '@heroicons/react/24/outline'
 
-export default async function TasksDone() {
+export default async function PendingTasks() {
     const allTasks = await fetchTasks();
 
     return (
-        <>
-            <h2 className="">
-                Tasks Finished
+        <div className="flex flex-col w-1/2 gap-4">
+            <h2 className="text-center mt-8 text-xl">
+                Tasks Done
             </h2>
-            {allTasks.filter(task => task.status).map((tasks) => {
+            {allTasks.filter(task => task.status).map((tasks) => {               
                 return (
                     <div 
-                        className=""
+                        // className="rounded-xl bg-gray-50 p-2 shadow-sm"
                         key={tasks.id}
                     >
-                        <div className="">
-                            <div className="">
-                                {/* liste des groupes et des shared */}
-                            </div>
-
-                            <div className="">
-                                <h3>{tasks.name}</h3>
-                                <div className="">
-                                    <p className="">
-                                        {tasks.priority}
-                                    </p>
-                                    {/* <p className="">
-                                        {tasks.deadline}
-                                    </p> */}
-                                </div>
+                        <div className="rounded-t-lg bg-sky-800 p-2 shadow-sm">
+                            <div className="flex flex-row justify-between">
                                 <div>
-                                    <h4 className="">
-                                        {/* {task.details} */}
-                                    </h4>
+                                    <p className="flex flex-row gap-1 text-white text-sm">
+                                        <UserCircleIcon className="text-white w-3 md:w-4" /> {tasks.username}
+                                    </p>
+                                </div>
+                                <div className="">
+                                    <p className="flex flex-row gap-1 text-white text-sm justify-end">
+                                        {tasks.sharedWithPeople && tasks.sharedWithPeople.length > 0 ?
+                                            <p>{tasks.sharedWithPeople.join(', ')}</p>   
+                                        :
+                                            <p>None</p>
+                                        }
+                                        <UserIcon className="text-white w-3 md:w-4" />
+                                    </p>
+                                    <p className="flex flex-row gap-1 text-white text-sm justify-end"> 
+                                        {tasks.sharedWithGroups && tasks.sharedWithGroups.length > 0 ?
+                                            <p>{tasks.sharedWithGroups.join(', ')}</p>   
+                                        :
+                                            <p>None</p>
+                                        }
+                                        <UserGroupIcon className="text-white w-3 md:w-4" />
+                                    </p>
                                 </div>
                             </div>
-                            <div className="">
-                                {/* {task.status ?
-                                    <p>Pending</p>    
+                            <div className="text-white text-2xl text-center">
+                                <h3>
+                                    {tasks.name}
+                                </h3>
+                            </div>
+                            <div className="flex flex-row justify-between text-sm">
+                                <p className={clsx({
+                                    'text-red-400' : tasks.priority === 'Urgent',
+                                    'text-orange-300' : tasks.priority === "Medium",
+                                    'text-green-400' : tasks.priority === 'Low'
+                                })}>
+                                    {tasks.priority}
+                                </p>
+                                <p className="text-white text-sm">
+                                    {formatDateToLocal(tasks.deadline)}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="rounded-b-lg bg-gray-50 p-2 shadow-sm">
+                            <div className="py-2">
+                                <h4 className="text-justify text-sm text-sky-800">
+                                    {tasks.details}
+                                </h4>
+                            </div>
+                            <div className="flex justify-end">
+                                {tasks.status ?
+                                    <CheckCircleIcon className="w-4 md:w-5 text-gray-600" />    
                                 :
-                                    <p>Done</p>
-                                } */}
+                                    <ClockIcon className="w-4 md:w-5 text-gray-600" />
+                                }
                             </div>
                         </div>
                     </div>
                 )
             })}
-        </>
+        </div>
     )
 }

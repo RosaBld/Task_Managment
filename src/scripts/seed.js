@@ -4,7 +4,8 @@ const {
     users,
     user_group,
     tasks,
-    sharedWith,
+    sharing_people,
+    sharing_group
 } = require('../app/lib/placeholder-data.js');
 
 const bcrypt = require('bcrypt');
@@ -108,13 +109,14 @@ async function seedTasks(client) {
         await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
         const createTable = await client.sql`
             CREATE TABLE IF NOT EXISTS tasks (
+                id UUID NOT NULL,
                 createdBy UUID NOT NULL REFERENCES users(id),
                 name VARCHAR(255) NOT NULL,
                 priority VARCHAR(255) NOT NULL,
                 deadline DATE NOT NULL,
                 details VARCHAR(255) NOT NULL,
                 status BOOLEAN NOT NULL,
-                PRIMARY KEY (createdBy, name)
+                PRIMARY KEY (id, createdBy, name)
             );
         `;
 
@@ -123,9 +125,9 @@ async function seedTasks(client) {
         const insertedTasks = await Promise.all(
             tasks.map(async (task) => {
                 return client.sql`
-                    INSERT INTO tasks (createdBy, name, priority, deadline, details, status)
-                    VALUES (${task.createdBy}, ${task.name}, ${task.priority}, ${task.deadline}, ${task.details}, ${task.status})
-                    ON CONFLICT (createdBy, name) DO NOTHING;
+                    INSERT INTO tasks (id, createdBy, name, priority, deadline, details, status)
+                    VALUES (${task.id}, ${task.createdBy}, ${task.name}, ${task.priority}, ${task.deadline}, ${task.details}, ${task.status})
+                    ON CONFLICT (id, createdBy, name) DO NOTHING;
                 `;
             }) 
         );
@@ -146,22 +148,60 @@ async function seedShared(client) {
     try {
         await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
         const createTable = await client.sql`
-        CREATE TABLE IF NOT EXISTS sharedWith (
+        CREATE TABLE IF NOT EXISTS sharing_people (
             task UUID NOT NULL,
-            shared UUID NOT NULL,
-            PRIMARY KEY (task, shared)
+            users UUID NOT NULL,
+            PRIMARY KEY (task, users)
         )`;
 
         console.log(`Created "shared with" table`);
         
         const insertedShared = await Promise.all(
-            sharedWith.map(async (sharedWith) => {
+            sharing_people.map(async (sharing_people) => {
                 return Promise.all(
-                    sharedWith.shared.map(async (shared) => {
+                    sharing_people.users.map(async (users) => {
                         return client.sql`
-                            INSERT INTO sharedWith (task, shared)
-                            VALUES (${sharedWith.task}, ${shared})
-                            ON CONFLICT (task, shared) DO NOTHING;
+                            INSERT INTO sharing_people (task, users)
+                            VALUES (${sharing_people.task}, ${users})
+                            ON CONFLICT (task, users) DO NOTHING;
+                        `;
+                    })
+                );
+            })
+        );
+        
+        console.log(`Seeded ${insertedShared.length} tasks`);
+
+        return {
+            createTable,
+            tasks: insertedShared,
+        };
+    } catch (error) {
+        console.error('Error seeding tasks:', error);
+        throw error;
+    }
+}
+
+async function seedSharedGroup(client) {
+    try {
+        await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+        const createTable = await client.sql`
+        CREATE TABLE IF NOT EXISTS sharing_group (
+            task UUID NOT NULL,
+            users UUID NOT NULL,
+            PRIMARY KEY (task, users)
+        )`;
+
+        console.log(`Created "shared with" table`);
+        
+        const insertedShared = await Promise.all(
+            sharing_group.map(async (sharing_group) => {
+                return Promise.all(
+                    sharing_group.users.map(async (users) => {
+                        return client.sql`
+                            INSERT INTO sharing_group (task, users)
+                            VALUES (${sharing_group.task}, ${users})
+                            ON CONFLICT (task, users) DO NOTHING;
                         `;
                     })
                 );
@@ -187,6 +227,7 @@ async function main() {
     await seedGroup(client, user_group);
     await seedTasks(client);
     await seedShared(client);
+    await seedSharedGroup(client);
 
     await client.end();
 }

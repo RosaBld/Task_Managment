@@ -3,20 +3,51 @@ import {
     User,
     Tasks,
     Groups,
-    SharedWith
+    SharingPeople,
+    SharingGroup
 } from './definitions';
 import { unstable_noStore as noStore } from 'next/cache';
 
 export async function fetchTasks() {
     noStore()
     try {
-        const data = await sql<Tasks>`SELECT * FROM tasks`;
+        const tasksResult = await sql<Tasks & { username: string }>`
+            SELECT tasks.*, users.name AS username
+            FROM tasks
+            INNER JOIN users ON tasks.CreatedBy = users.id`;
 
-        return data.rows;
+        const sharingResult = await sql<SharingPeople & { sharedtask: string, sharedwith: string[] }>`
+            SELECT sharing_people.task AS sharedTask, ARRAY_AGG(users.name) AS sharedWith
+            FROM sharing_people
+            INNER JOIN users ON sharing_people.users = users.id
+            GROUP BY sharing_people.task`;
+
+        const sharingGroupResult = await sql<SharingGroup & { sharedtask: string, sharedwith: string[] }>`
+            SELECT sharing_group.task AS sharedtask, ARRAY_AGG(user_group.name) AS sharedwith
+            FROM sharing_group
+            INNER JOIN user_group ON sharing_group.users = user_group.id
+            GROUP BY sharing_group.task`;
+
+        const sharingPeopleMap = sharingResult.rows.reduce<Record<string, string[]>>((map, { sharedtask, sharedwith }) => {
+            map[sharedtask] = sharedwith;
+            return map;
+        }, {});
+        
+        const sharingGroupMap = sharingGroupResult.rows.reduce<Record<string, string[]>>((map, { sharedtask, sharedwith }) => {
+            map[sharedtask] = sharedwith;
+            return map;
+        }, {});
+        
+        return tasksResult.rows.map((task: Tasks & { username: string }) => ({
+            ...task,
+            sharedWithPeople: sharingPeopleMap[task.id] || [],
+            sharedWithGroups: sharingGroupMap[task.id] || []
+        }));
+        
 
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch tasks data.');
+        throw error;
     }
 }
 

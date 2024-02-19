@@ -8,7 +8,7 @@ export default async function Page() {
             <div className="flex justify-around">
                 <CardWrapper />
             </div>
-            <div className="flex flex-row">
+            <div className="flex flex-col lg:flex-row w-full gap-8">
                 <PendingTasks />
                 <TasksDone />
             </div>

@@ -9,7 +9,7 @@ export type Tasks = {
     id: string,
     createdBy: string,
     name: string,
-    priority: string,
+    priority: 'Low' | 'Medium' | 'Urgent',
     deadline: string,
     details: string,
     status: 'pending' | 'done',
@@ -18,11 +18,16 @@ export type Tasks = {
 export type Groups = {
     id: string,
     admin: string,
-    members: [string],
+    members: string[],
     name: string,
 }
 
-export type SharedWith = [
+export type SharingPeople = {
     task: string,
-    shared : [string],
-]
+    shared : string[],
+}
+
+export type SharingGroup = {
+    task: string,
+    shared : string[],
+}
