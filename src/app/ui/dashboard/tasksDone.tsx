@@ -20,27 +20,28 @@ export default async function PendingTasks() {
                         <div className="rounded-t-lg bg-sky-800 p-2 shadow-sm">
                             <div className="flex flex-row justify-between">
                                 <div>
-                                    <p className="flex flex-row gap-1 text-white text-sm">
-                                        <UserCircleIcon className="text-white w-3 md:w-4" /> {tasks.username}
-                                    </p>
+                                    <div className="flex flex-row gap-1 text-white text-sm">
+                                        <UserCircleIcon className="text-white w-3 md:w-4" /> 
+                                        <p>{tasks.username}</p>
+                                    </div>
                                 </div>
                                 <div className="">
-                                    <p className="flex flex-row gap-1 text-white text-sm justify-end">
+                                    <div className="flex flex-row gap-1 text-white text-sm justify-end">
                                         {tasks.sharedWithPeople && tasks.sharedWithPeople.length > 0 ?
                                             <p>{tasks.sharedWithPeople.join(', ')}</p>   
                                         :
                                             <p>None</p>
                                         }
                                         <UserIcon className="text-white w-3 md:w-4" />
-                                    </p>
-                                    <p className="flex flex-row gap-1 text-white text-sm justify-end"> 
+                                    </div>
+                                    <div className="flex flex-row gap-1 text-white text-sm justify-end"> 
                                         {tasks.sharedWithGroups && tasks.sharedWithGroups.length > 0 ?
                                             <p>{tasks.sharedWithGroups.join(', ')}</p>   
                                         :
                                             <p>None</p>
                                         }
                                         <UserGroupIcon className="text-white w-3 md:w-4" />
-                                    </p>
+                                    </div>
                                 </div>
                             </div>
                             <div className="text-white text-2xl text-center">
