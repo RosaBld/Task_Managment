@@ -3,6 +3,7 @@ export type User = {
     name: string;
     email: string;
     password: string;
+    groupid: string,
 };
 
 export type Tasks = {
@@ -30,4 +31,18 @@ export type SharingPeople = {
 export type SharingGroup = {
     task: string,
     shared : string[],
+}
+
+export type TaskField = {
+    id: string;
+}
+
+export type UserField = {
+    id: string,
+    name: string,
+}
+
+export type GroupField = {
+    id: string,
+    name: string,
 }

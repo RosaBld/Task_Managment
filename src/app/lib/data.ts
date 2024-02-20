@@ -1,6 +1,7 @@
 import { sql } from '@vercel/postgres';
 import {
     User,
+    UserField,
     Tasks,
     Groups,
     SharingPeople,
@@ -84,9 +85,53 @@ export async function fetchTasksData() {
 export async function fetchGroups() {
     noStore()
     try {
-        const data = await sql<Groups>`SELECT * FROM user_group
-            JOIN * FROM group_members`;
-        return data.rows;
+        const groupsResult = await sql<Groups>`
+            SELECT user_group.*, users.name AS admin_name FROM user_group
+            JOIN group_members
+            ON user_group.id = group_members.group_id
+            JOIN users
+            ON user_group.admin = users.id`;
+
+        const groupUsersResult = await sql<User>`
+            SELECT users.id, users.name, group_members.group_id AS groupId
+            FROM users
+            INNER JOIN group_members ON users.id = group_members.member_id`;
+
+        const groups = groupsResult.rows;
+        const groupUsers = groupUsersResult.rows;
+
+        const uniqueGroups = Array.from(new Set(groups.map(group => group.id)))
+            .map(id => {
+                const group = groups.find(group => group.id === id);
+                if (group) {
+                    return group;
+                } else {
+                    throw new Error(`Group with id ${id} not found`);
+                }
+            });
+
+        const groupsMap = new Map();
+
+        uniqueGroups.forEach((group: Groups) => {
+            groupsMap.set(group.id, {
+                ...group,
+                member_id: [],
+                users: [],
+            });
+        });
+
+        groupUsers.forEach((user: User) => {
+            uniqueGroups.forEach((group: Groups) => {
+                if (group.id === user.groupid) {
+                    const groupEntry = groupsMap.get(group.id);
+                    groupEntry.member_id.push(user.id);
+                    groupEntry.users.push(user.name);
+                }
+            });
+        });
+
+        return Array.from(groupsMap.values());
+        
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to fetch group data.');
@@ -96,8 +141,9 @@ export async function fetchGroups() {
 export async function fetchUsers() {
     noStore()
     try {
-        const data = await sql<User>`SELECT name FROM users`;
-        return data;
+        const data = await sql<UserField>`SELECT id, name FROM users`;
+        const user = data.rows;
+        return user;
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to fetch user name data.');

@@ -1,6 +1,5 @@
 import CardWrapper from "@/app/ui/dashboard/cards";
-import PendingTasks from "@/app/ui/dashboard/pendingTasks";
-import TasksDone from "@/app/ui/dashboard/tasksDone";
+import PendingTasks from "@/app/ui/dashboard/pendingTasks"; 
 
 export default async function Page() {
     return (

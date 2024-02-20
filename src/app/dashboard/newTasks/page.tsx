@@ -1,11 +1,13 @@
+import { fetchTasks } from "@/app/lib/data"
+import Form from "@/app/ui/newTasks/create-form"
 
+export default async function NewTasks() {
+    
+    const tasks = await fetchTasks();
 
-export default function NewTasks() {
     return (
-        <>
-            <p>
-                Page under construction
-            </p>
-        </>
+        <main>
+            <Form tasks={tasks} />
+        </main>
     )
 }
