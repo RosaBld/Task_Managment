@@ -14,7 +14,10 @@ export default function Form({
         <form action={createGroup}>
             <label>
                 Group Name:
-                <input type="text" name="groupName" />
+                <input type="text" name="groupName" placeholder="Name"/>
+            </label>
+            <label>
+                User member:
             </label>
             <select
                 id="user"
@@ -30,10 +33,6 @@ export default function Form({
                     </option>
                 ))}
             </select>
-            <label>
-                User member:
-            <input type="text" name="userMember" />
-            </label>
             <input type="submit" value="Create Group" />
         </form>
     );
