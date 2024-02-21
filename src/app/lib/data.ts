@@ -144,8 +144,20 @@ export async function fetchUsers() {
         const data = await sql<UserField>`SELECT id, name FROM users`;
         const user = data.rows;
         return user;
+        
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to fetch user name data.');
     }
 }
+
+export async function getUser(email: string) {
+    noStore()
+    try {
+      const user = await sql`SELECT * FROM users WHERE email=${email}`;
+      return user.rows[0] as User;
+    } catch (error) {
+      console.error('Failed to fetch user:', error);
+      throw new Error('Failed to fetch user.');
+    }
+  }

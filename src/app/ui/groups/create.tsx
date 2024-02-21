@@ -1,44 +1,38 @@
 'use client';
 
-import React, { useState } from 'react';
+import { UserField } from "@/app/lib/definitions";
+import Link from "next/link";
+import { createGroup } from '@/app/lib/actions';
+import { fetchUsers } from "@/app/lib/data";
 
-export default function CreateGroupForm() {
-    const [groupName, setGroupName] = useState('');
-    const [adminName, setAdminName] = useState('');
-    const [userName, setUserName] = useState('');
-
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const groupData = { groupName, adminName };
-
-        const response = await fetch('/api/createGroup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(groupData),
-        });
-
-        if (response.ok) {
-            console.log('Group created successfully');
-        } else {
-            console.error('Failed to create group');
-        }
-    };
-
+export default function Form({
+    users,
+} : {
+    users: UserField[];
+}) {    
     return (
-        <form onSubmit={handleSubmit}>
+        <form action={createGroup}>
             <label>
                 Group Name:
-                <input type="text" value={groupName} onChange={(e) => setGroupName(e.target.value)} />
+                <input type="text" name="groupName" />
             </label>
+            <select
+                id="user"
+                name="userName"
+                defaultValue=""
+            >
+                <option value="" disabled>
+                    Select a member
+                </option>
+                {users.map((user) => (
+                    <option key={user.id} value={user.id}>
+                        {user.name}
+                    </option>
+                ))}
+            </select>
             <label>
-                Admin Name:
-                <input type="text" value={adminName} onChange={(e) => setAdminName(e.target.value)} />
-            </label>
-            <label>
-                User Name:
-            <input type="text" value={userName} onChange={(e) => setUserName(e.target.value)} />
+                User member:
+            <input type="text" name="userMember" />
             </label>
             <input type="submit" value="Create Group" />
         </form>
