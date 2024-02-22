@@ -5,28 +5,27 @@ import { fetchUsers } from "@/app/lib/data";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: 'Create Groups',
+  title: 'Create Groups',
 };
 
 export default async function Page() {
-    const users = await fetchUsers();
+  const users = await fetchUsers();
 
-    return (
-        <main>
-            <Breadcrumbs
-                breadcrumbs={[
-                    {label: 'Groups', href: '/dashboard/groups/'},
-                    {
-                        label: 'Create Groups',
-                        href: '/dashboard/groups/create',
-                        active:true,
-                    },
-                    
-                ]}
-            />
-            
-            <Form users={users} />
-            
-        </main>
-    )
+  return (
+    <main>
+      <Breadcrumbs
+        breadcrumbs={[
+          {label: 'Groups', href: '/dashboard/groups/'},
+          {
+            label: 'Create Groups',
+            href: '/dashboard/groups/create',
+            active:true,
+          },
+        ]}
+      />
+      
+      <Form users={users} />
+
+    </main>
+  )
 }

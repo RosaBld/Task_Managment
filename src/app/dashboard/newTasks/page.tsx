@@ -3,11 +3,11 @@ import Form from "@/app/ui/newTasks/create-form"
 
 export default async function NewTasks() {
     
-    const user = await fetchTasks();
+  const user = await fetchTasks();
 
-    return (
-        <main>
-            <Form user={user} />
-        </main>
-    )
+  return (
+    <main>
+      <Form user={user} />
+    </main>
+  )
 }
