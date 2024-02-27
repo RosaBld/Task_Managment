@@ -64,7 +64,7 @@ function LoginButton() {
 
   return (
     <Button className="" aria-disabled={pending} >
-      Login In
+      Log In
     </Button>
   )
 }

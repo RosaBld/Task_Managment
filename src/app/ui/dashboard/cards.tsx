@@ -1,16 +1,5 @@
-import {
-  ClockIcon,
-  UserGroupIcon,
-  UserIcon
-} from '@heroicons/react/24/outline';
 import { lusitana } from '@/app/ui/fonts';
 import { fetchTasksData } from '@/app/lib/data';
-
-const iconMap = {
-  users: UserIcon,
-  groups: UserGroupIcon,
-  deadline: ClockIcon
-};
 
 export default async function CardWrapper() {
   const {
@@ -37,7 +26,6 @@ export function Card({
   value: number | string;
   type: 'tasks' | 'users' | 'done' | 'pending';
 }) {
-    // const Icon = iconMap[type];
 
   return (
     <div className="">

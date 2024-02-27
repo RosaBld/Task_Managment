@@ -1,5 +1,5 @@
-import TaMaLogo from "./ui/TaMa-logo";
-import { lusitana } from "./ui/fonts";
+import TaMaLogo from "../app/ui/TaMa-logo";
+import { lusitana } from "../app/ui/fonts";
 import Link from "next/link";
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 

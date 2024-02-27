@@ -1,6 +1,5 @@
 import Form from "@/app/ui/groups/create";
 import Breadcrumbs from "@/app/ui/newTasks/breadcrumbs";
-import { fetchGroups } from "@/app/lib/data";
 import GroupList from "@/app/ui/groups/list";
 import { CreateGroup } from "@/app/ui/groups/buttons";
 

@@ -1,4 +1,4 @@
-import { fetchGroups } from "@/app/lib/data"
+import { fetchGroups } from '@/app/lib/data';
 import { UserCircleIcon, UserGroupIcon, UserIcon } from '@heroicons/react/24/outline'
 
 export default async function GroupList() {

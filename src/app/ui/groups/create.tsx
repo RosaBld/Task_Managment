@@ -2,8 +2,7 @@
 
 import { UserField } from "@/app/lib/definitions";
 import Link from "next/link";
-import { createGroup } from '@/app/lib/actions';
-import { fetchUsers } from "@/app/lib/data";
+import { createGroup } from "@/app/lib/actions";
 
 export default function Form({
   users,
