@@ -1,6 +1,4 @@
 import type { NextAuthConfig } from 'next-auth';
-import { signOut } from 'next-auth/react';
-
 
 // export const authConfig: NextAuthConfig = {
 //   pages: {
