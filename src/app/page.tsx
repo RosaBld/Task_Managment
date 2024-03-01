@@ -10,12 +10,12 @@ export default function Home() {
         <TaMaLogo />
       </div>
       <div className="flex grow flex-col gap-4 md:flex-row mt-4">
-    <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-4 py-6 md:w-3/5 md:px-14">
+        <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-4 py-6 md:w-3/5 md:px-14">
           <p className={`${lusitana.className} text-lg text-gray-800 md:text-xl md:leading-normal text-justify`}>
             With <strong>TaMa</strong>, stay at the top of your projects!
           </p>
           <Link
-            href="/create"
+            href="/register"
             className="flex items-center justify-between self-start rounded-lg bg-cyan-800 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base w-60"
           >
             <span>Create an Account</span> <ArrowRightIcon className="w-5 md:w-6" />

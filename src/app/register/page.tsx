@@ -1,17 +1,16 @@
 import TaMaLogo from "@/app/ui/TaMa-logo";
-import LoginForm from '@/app/ui/login-form';
+import RegisterForm from '@/app/ui/login-form';
 import getServerSession from "next-auth";
 import { redirect } from "next/navigation";
 import { authConfig } from "../../../auth.config";
 
+export default async function RegisterPage() {
 
-export default async function LoginPage() {
+    const session = await getServerSession(authConfig);
 
-  const session = await getServerSession(authConfig);
-
-  if (!session) {
-    redirect("/login")
-  }
+    if (!session) {
+      redirect("/register");
+    }
 
   return (
     <main className="">
@@ -19,7 +18,7 @@ export default async function LoginPage() {
         <div className="">
           <TaMaLogo />
         </div>
-        <LoginForm />
+        <RegisterForm />
       </div>
     </main>
   )

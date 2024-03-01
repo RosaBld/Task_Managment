@@ -3,8 +3,19 @@ import NavLinks from '@/app/ui/dashboard/nav-links';
 import { PowerIcon } from '@heroicons/react/24/outline';
 import { signOut } from '../../../../auth';
 import TaMaLogo from '../TaMa-logo';
+import getServerSession from "next-auth";
+import { redirect } from "next/navigation";
+import { authConfig } from '../../../../auth.config';
 
-export default function SideNav() {
+export default async function SideNav() {
+
+  const session = await getServerSession(authConfig);
+  console.log(session);
+
+  if (!session) {
+    redirect("/")
+  }
+
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
       <Link

@@ -77,8 +77,8 @@ const CreateGroup=FormSchema.omit({ id: true, AdminId: true, userId: true });
 export async function createGroup(formData: FormData) {
   const { groupName, adminName, userMember } = CreateGroup.parse ({
     groupName: formData.get('groupName'),
-  adminName: formData.get('adminName'),
-  userMember: formData.get('userMember'),
+    adminName: formData.get('adminName'),
+    userMember: formData.get('userMember'),
   });
 
   const { v4: uuidv4 } = require('uuid');
